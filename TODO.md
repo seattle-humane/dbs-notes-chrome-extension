@@ -1,4 +1,4 @@
-# Requirements (priority order)
+# Feature ideas (priority order)
 1. [done] Prevent session timeout
 2. [done] Use better default animal search options (by name, active only)
 3. Make giant "search for another dog", "see DBS notes", and "add DBS note" buttons
