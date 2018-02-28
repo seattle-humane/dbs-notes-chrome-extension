@@ -1,0 +1,18 @@
+{
+    "manifest_version": 2,
+  
+    "name": "Seattle Humane PetPoint Extension",
+    "description": "Adds Seattle Humane specific functionality on top of the PetPoint frontend.",
+    "author": "Dan Bjorge <dbjorge@gmail.com>",
+    "version": "1.0",
+
+    "content_scripts": [
+        {
+            "matches": ["https://sms.petpoint.com/sms3/*"],
+            "js": ["script/content_script.js"]
+        }
+    ],
+    "web_accessible_resources": [
+        "script/injected_script.js"
+    ]
+  }
