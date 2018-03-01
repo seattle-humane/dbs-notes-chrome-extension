@@ -20,45 +20,117 @@ function setAnimalSearchCriteriaDefaults() {
     var nameOption = searchCriteriaSelectElement.children().filter(function() { return $(this).text() == "Name" } );
     var nameOptionValue = nameOption.attr('value');
 
-    console.debug('Setting criteria to Name, detected as value ' + nameOptionValue);
-    searchCriteriaSelectElement.val(nameOptionValue).change();
-
-    var dynamicSetAttempts = 0;
-    var dynamicSetRetryDelayMs = 100;
-    var dynamicSetMaxAttempts = 50;
-    var setDefaultsForDynamicallyAddedElements = function() {
-        dynamicSetAttempts++;
-        console.debug('entering setDefaultsForDynamicallyAddedElements attempt ' + dynamicSetAttempts);
-
-        // It's important not to cache the table.search element from the non-dynamic part because
-        // the whole table.search element gets replaced during the search criteria UI update
+    if (searchCriteriaSelectElement.val() != nameOptionValue) {
+        searchCriteriaSelectElement.val(nameOptionValue).change();
+    } else {
         var activeOnlyRadioInput = $('table.search input[id$=_ctrlAnimalSearch_CB_OnlyActive_1]');
         var animalNameInputBox = $('table.search input[id$=_ctrlAnimalSearch_txtFirstCriteria]');
-
         if (activeOnlyRadioInput.length === 0 || animalNameInputBox.length === 0) {
-            if (dynamicSetAttempts > dynamicSetMaxAttempts) {
-                console.error('Giving up on finding dynamically added search elements');
-            } else {
-                console.debug('Didn\'t find dynamically added search elements, scheduling another try...');
-                // This is important for the case where our original change to the element happened before PetPoint's
-                // onchange handler was dynamically registered
-                searchCriteriaSelectElement.change();
-                setTimeout(setDefaultsForDynamicallyAddedElements, dynamicSetRetryDelayMs);
-            }
-            return;
+            console.warn('unexpected search UI state'); return;
         }
-
-        console.debug('Selecting Active Only radio input');
-        activeOnlyRadioInput.prop("checked", true).change();
-
-        console.debug('Assigning focus to the Animal Name input box');
+        activeOnlyRadioInput.prop("checked", true);
         animalNameInputBox.focus();
-    };
-    setTimeout(setDefaultsForDynamicallyAddedElements, 1000);
+    }
+}
+
+function hideUnnecessaryGlobalPetPointUi() {
+    $('div.master_menuholder').hide();
+    $('a#aLogo').attr('href', 'CareActivityTab.aspx?CreateActivity=1')
+}
+
+function hideUnnecessaryCareActivityUi() {
+    for(selector of [
+        // Care Activity page header
+        'table.main_header_table',
+        // Selected animal list
+        '#cphSearchArea_ctrlCareActivity_ctrlCareActivityAnimalList_pnlAnimalList',
+        // standalone 'Animal Search' tab under main tabs
+        '#cphSearchArea_ctrlCareActivity_ctrlAnimal_Button0',
+        // Unnecessary checkbox in search UI
+        '#cphSearchArea_ctrlCareActivity_ctrlAnimal_tblCreateOwnership',
+        // Unnecessary buttons in search UI
+        '#cphSearchArea_ctrlCareActivity_ctrlAnimal_ctrlAnimalSearch_btnSearchAdvanced',
+        '#cphSearchArea_ctrlCareActivity_ctrlAnimal_ctrlAnimalSearch_btnClearSearch',
+        '#cphSearchArea_ctrlCareActivity_ctrlAnimal_btnCreateNewAnimal',
+        // Unnecessary info in Add Note UI
+        '#cphSearchArea_ctrlCareActivity_ctrlCareActivityDetails_pnlActivityDetails table.created_by',
+        // Unnecessary buttons in Add Note UI
+        '#cphSearchArea_ctrlCareActivity_ctrlCareActivityDetails_btnSpellCheck',
+        '#cphSearchArea_ctrlCareActivity_btnSave',
+        '#cphSearchArea_ctrlCareActivity_btnClear' // doesn't actually clear fields
+    ]) {
+        $(selector).hide();
+    }
+}
+
+// Returns the empty string if no animal is selected
+function getSelectedAnimalName() {
+    const nameColumnIndex = 4;
+
+    var selectedAnimalsTable = $('#cphSearchArea_ctrlCareActivity_ctrlCareActivityAnimalList_dgAnimals');
+    if (selectedAnimalsTable.length === 0) {
+        // Expected case for no selected animals
+        return '';
+    }
+    
+    var headerCells = selectedAnimalsTable.find('tr.grid_header td');
+    var nameColumnHeaderText = $(headerCells[nameColumnIndex]).text();
+    if (nameColumnHeaderText != 'Name') {
+        console.error(`getSelectedAnimalName: expected column ${nameColumnIndex} to be Name but was ${nameColumnHeaderText}`)
+        return '';
+    }
+    var dataCells = selectedAnimalsTable.find('tr.grid_row td');
+    if (dataCells.length === 0) {
+        console.warn('getSelectedAnimalName: no data cells');
+        return '';
+    }
+    return $(dataCells[nameColumnIndex]).text();
+}
+
+function adjustCareActivityTabs() {
+    var selectedAnimalName = getSelectedAnimalName();
+    if (selectedAnimalName == '') {
+        $('#cphSearchArea_ctrlCareActivity_Button0').hide(); // Search
+        $('#cphSearchArea_ctrlCareActivity_Button1').hide(); // Person
+        $('#cphSearchArea_ctrlCareActivity_Button2').val('Pick an animal'); // Animal (which is really a search UI in this case)
+        $('#cphSearchArea_ctrlCareActivity_Button3').hide(); // Details
+    } else {
+        $('#cphSearchArea_ctrlCareActivity_Button0').val('Pick an animal') // Search
+        $('#cphSearchArea_ctrlCareActivity_Button0').click(function() {
+            // The default behavior is to search activities by ID, which is useless
+            // Replace it with a link back to the animal search UI
+            window.location.href = 'CareActivityTab.aspx?CreateActivity=1'
+        });
+        
+        $('#cphSearchArea_ctrlCareActivity_Button1').hide(); // Person
+        $('#cphSearchArea_ctrlCareActivity_Button2').val(`Read ${selectedAnimalName}'s notes`); // Animal
+        $('#cphSearchArea_ctrlCareActivity_Button3').val(`Add new note for ${selectedAnimalName}`); // Details
+    }
+}
+
+function onCareActivityPanelLoad() {
+    hideUnnecessaryCareActivityUi();
+    adjustCareActivityTabs();
+    setAnimalSearchCriteriaDefaults();
+}
+
+function registerUpdatePanelHandler(panelSelector, handler) {
+    var observer = new MutationObserver(function(mutationsList) {
+        console.debug('Observed mutation ' + mutationsList);
+        for(var mutation of mutationsList) {
+            if (mutation.type == 'childList' && $(mutation.target).is(panelSelector)) {
+                console.debug('Observed addition of panel matching ' + panelSelector)
+                setTimeout(handler, 0);
+            }
+        }
+    });
+
+    $(panelSelector).parent().each(function() {
+        console.debug('Registering observer at ' + this);
+        observer.observe(this, {childList: true, subtree: true})
+    });
 }
 
 preventSessionTimeout();
-
-// The 1s delay is required for the New Care Activity page, but not the Edit Animal page
-// Would be nice to find a more deterministic way to deal with New Care Activity
-setTimeout(setAnimalSearchCriteriaDefaults, 1000);
+hideUnnecessaryGlobalPetPointUi();
+registerUpdatePanelHandler('div#cphSearchArea_ctrlCareActivity_pnlCareActivityTabs', onCareActivityPanelLoad);
