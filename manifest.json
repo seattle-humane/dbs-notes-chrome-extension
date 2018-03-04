@@ -1,9 +1,9 @@
 {
     "manifest_version": 2,
   
-    "name": "Seattle Humane PetPoint Extension",
-    "description": "Adds Seattle Humane specific functionality on top of the PetPoint frontend.",
-    "author": "Dan Bjorge <dbjorge@gmail.com>",
+    "name": "Seattle Humane DBS PetPoint Extension",
+    "description": "Adds Seattle Humane DBS specific functionality on top of the PetPoint frontend.",
+    "author": "Seattle Humane Engineering <seattlehumaneengineering@gmail.com>",
     "version": "1.0",
 
     "icons": {
