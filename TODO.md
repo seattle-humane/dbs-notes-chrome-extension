@@ -3,7 +3,7 @@
 2. [done] Use better default animal search options (by name, active only)
 3. [done] Make giant "search for another dog", "see DBS notes", and "add DBS note" buttons
 4. [done] Make "read notes" page use DBS Notes document instead of normal editable fields
-5. Add selector panels/name/etc fields to details page
+5. [in progress] Add selector panels/name/etc fields to details page
 6. Default Category to DBS
 7. [blocked] Make "see DBS notes" render inline instead of in a popup
 8. [partly done] Suppress unnecessary PetPoint elements (main nav menu especially)

@@ -17,10 +17,12 @@
         {
             "matches": ["https://sms.petpoint.com/sms3/*"],
             "js": ["script/content_script.js"],
+            "css": ["css/injected_css.css"],
             "run_at": "document_start"
         }
     ],
     "web_accessible_resources": [
-        "script/injected_script.js"
+        "script/injected_script.js",
+        "css/injected_css.js"
     ]
   }

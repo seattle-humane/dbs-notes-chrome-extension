@@ -159,12 +159,74 @@ function replaceAnimalTabContentWithDbsNotes() {
     `);
 }
 
+function onNoteUiInputChange() {
+    
+}
+
+function setUpAddNoteUi() {
+    var newAddNoteUi = $(`
+    <div id="shsdbs-noteui-container">
+      <div>Date/Time: <div id="replace_with_original_date_time" /></div>
+      <div>
+        <label for="shsdbs-noteui-input-animalname">Animal's Name:</label>
+        <input id="shsdbs-noteui-input-animalname" class="form-control" disabled />
+      <div>
+        <label for="shsdbs-noteui-input-yourname">Your Name:</label>
+        <input id="shsdbs-noteui-input-yourname" class="form-control" autocomplete="name" required />
+      <div>Your DBS Level: </div>
+      <!-- separator -->
+      <div>Activity type: </div>
+      <div class="shsdbs-noteui-section">
+        <h1>Training</h1>
+        <div></div>
+      </div>
+      <div class="shsdbs-noteui-section">
+        <h1>Observations</h1>
+
+      </div>
+      <div class="shsdbs-noteui-section">
+        <h1>Comments</h1>
+        <textarea row="3" cols="50" style="width:98%;" class="form-control" id="shsdbs-noteui-input-comments" />
+      </div>
+      <div class="shsdbs-noteui-section">
+        <h1>Full note</h1>
+        <textarea id="replace_with_original_note_areatext" />
+      </div>
+      <!-- separator -->
+      <div id="replace_with_original_submit_button" />
+    </div>
+    `);
+    var originalAddNoteUi = $('#cphSearchArea_ctrlCareActivity_ctrlCareActivityDetails_pnlActivityDetails');
+
+    newAddNoteUi.find('#shsdbs-noteui-input-animalname').val(`${getSelectedAnimalName()} (${getSelectedAnimalId()})`);
+    newAddNoteUi.find('input, textarea')
+        .change(onNoteUiInputChange)
+        .css({
+        });;
+
+    newAddNoteUi
+        .find('#replace_with_original_date_time')
+        .replaceWith(originalAddNoteUi.find('#cphSearchArea_ctrlCareActivity_ctrlCareActivityDetails_txtStatusDate'));
+    newAddNoteUi
+        .find('#replace_with_original_note_areatext')
+        .replaceWith(originalAddNoteUi.find('#cphSearchArea_ctrlCareActivity_ctrlCareActivityDetails_txtActivityNotes').prop('disabled', true));
+    newAddNoteUi
+        .find('#replace_with_original_submit_button')
+        .replaceWith(originalAddNoteUi.find('#cphSearchArea_ctrlCareActivity_btnAdd'));
+
+    originalAddNoteUi.children().hide();
+    originalAddNoteUi.append(newAddNoteUi);
+
+    $('#shsdbs-noteui-input-yourname').focus();
+}
+
 function onCareActivityPanelUpdate() {
     console.debug('onCareActivityPanelUpdate');
     hideUnnecessaryCareActivityUi();
     adjustCareActivityTabs();
     replaceAnimalTabContentWithDbsNotes();
     setAnimalSearchCriteriaDefaults();
+    setUpAddNoteUi();
     hidePageLoadingScreen();
 }
 
@@ -199,21 +261,7 @@ function hidePageLoadingScreen() {
     $('#extension-injected-page-loading-screen').fadeOut();
 }
 function setupPageLoadingScreen() {
-    var loadingScreenDiv = $('<div id="extension-injected-page-loading-screen">Loading...</div>').css({
-        'position': 'fixed',
-        'width': '100%',
-        'height': '100%',
-        'background-color': '#fff',
-        'z-index': 999,
-        'top': 0,
-        'left': 0,
-        'text-align': 'center',
-        'padding': '200px',
-        'font-size': '3em',
-        'opacity': .95,
-        //'display': 'none',
-    });
-
+    var loadingScreenDiv = $('<div id="extension-injected-page-loading-screen">Loading...</div>');
     $('body').append(loadingScreenDiv);
 }
 
