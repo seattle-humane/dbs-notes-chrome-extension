@@ -16,7 +16,8 @@
     "content_scripts": [
         {
             "matches": ["https://sms.petpoint.com/sms3/*"],
-            "js": ["script/content_script.js"]
+            "js": ["script/content_script.js"],
+            "run_at": "document_start"
         }
     ],
     "web_accessible_resources": [
