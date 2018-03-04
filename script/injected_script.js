@@ -16,7 +16,7 @@ function registerSiteWidePetPointUiUpdates() {
 g_AlreadySetDefaults = false;
 function setAnimalSearchCriteriaDefaults() {
     if (g_AlreadySetDefaults) { return; }
-    
+
     console.debug('setAnimalSearchCriteriaDefaults');
     var searchCriteriaSelectElement = $('table.search select[id$=_ctrlAnimalSearch_ddlCriteria]');
 
@@ -132,11 +132,7 @@ function adjustCareActivityTabs() {
         });
         
         $('#cphSearchArea_ctrlCareActivity_Button1').hide(); // Person
-        $('#cphSearchArea_ctrlCareActivity_Button2').val(`Read ${selectedAnimalName}'s notes`) // Animal
-        $('#cphSearchArea_ctrlCareActivity_Button2')[0].type = 'button'; // Suppress default tab behavior by disconnecting it from form submit
-        $('#cphSearchArea_ctrlCareActivity_Button2').click(function() {
-            openDbsNotesPopup();
-        })
+        $('#cphSearchArea_ctrlCareActivity_Button2').val(`Read ${selectedAnimalName}'s notes`).click(showPageLoadingScreen); // Animal
         $('#cphSearchArea_ctrlCareActivity_Button3').val(`Add new note for ${selectedAnimalName}`).click(showPageLoadingScreen); // Details
     }
 }
@@ -147,8 +143,19 @@ function replaceAnimalTabContentWithDbsNotes() {
         return;
     }
 
+    // This is what we want to do, but we're blocked because CustomDocument.aspx
+    // downgrades from https to http in a redirect, which we have no means of
+    // intercepting or forcibly upgrading to prevent the resulting "mixed content"
+    // errors. PetPoint support case #00429913.
+
+    /*
     animalTabContentContainer.html(`
-    <iframe src="../embeddedreports/CustomDocument.aspx?document=CustomAnimalDocument,DBS%20Notes,37737071" />
+        <iframe src="../embeddedreports/CustomDocument.aspx?document=CustomAnimalDocument,DBS%20Notes,37737071" />
+    `);
+    */
+
+    animalTabContentContainer.html(`
+        <input type="button" onclick="openDbsNotesPopup()" value="Open DBS Notes in new tab" />
     `);
 }
 
@@ -156,7 +163,7 @@ function onCareActivityPanelUpdate() {
     console.debug('onCareActivityPanelUpdate');
     hideUnnecessaryCareActivityUi();
     adjustCareActivityTabs();
-    //replaceAnimalTabContentWithDbsNotes();
+    replaceAnimalTabContentWithDbsNotes();
     setAnimalSearchCriteriaDefaults();
     hidePageLoadingScreen();
 }
