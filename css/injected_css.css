@@ -15,12 +15,12 @@
     outline: none;
 }
 
-#shsdbs-noteui-section-header {
+.shsdbs-noteui-horizontal-section {
     display: inline-flex;
 }
-#shsdbs-noteui-section-header fieldset {
+.shsdbs-noteui-horizontal-section fieldset {
     display: flex;
-    margin: 20px 6px;
+    margin: 8px 6px;
 }
 
 #extension-injected-page-loading-screen {

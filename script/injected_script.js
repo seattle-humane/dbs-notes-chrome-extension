@@ -205,7 +205,7 @@ ${$('#shsdbs-noteui-input-comments').val()}
 function setUpAddNoteUi() {
     var newAddNoteUi = $(`
     <div id="shsdbs-noteui-container">
-      <div id="shsdbs-noteui-section-header">
+      <div class="shsdbs-noteui-horizontal-section">
         <fieldset>
           <label for="shsdbs-noteui-input-yourname">Your Name:</label>
           <input type="text" id="shsdbs-noteui-input-yourname" class="form-control" autocomplete="name" required />
@@ -213,7 +213,7 @@ function setUpAddNoteUi() {
         <fieldset>
           <label for="shsdbs-noteui-input-dbslevel">Your DBS Level:</label>
           <select id="shsdbs-noteui-input-dbslevel" class="form-control" required>
-            <option value="">-- Select Level --</option>
+            <option value="">-- Select --</option>
             <option>DBS 2</option>
             <option>DBS 3</option>
             <option>DBS 4</option>
@@ -230,9 +230,9 @@ function setUpAddNoteUi() {
           <div id="replace_with_original_date_time" /></fieldset>
         </fieldset>
       </div>
+      <h1>Activity</h1>
       <div class="shsdbs-noteui-section">
         <fieldset id="shsdbs-noteui-fieldset-activity">
-          <h1>Activity</h1>
           <input type="checkbox" name="shsdbs-noteui-input-activity" id="shsdbs-noteui-input-activity-walk" value="Walk" />
           <label for="shsdbs-noteui-input-activity-walk">Walk</label>
 
@@ -252,25 +252,139 @@ function setUpAddNoteUi() {
           <label for="shsdbs-noteui-input-activity-other">Other</label>
         </fieldset>
       </div>
-      <div class="shsdbs-noteui-section">
-        <h1>Training</h1>
-        <div></div>
+      <h1>Training</h1>
+      <div class="shsdbs-noteui-horizontal-section">
+        <fieldset>
+          <label for="shsdbs-noteui-input-training-sit">Sit:</label>
+          <select id="shsdbs-noteui-input-training-sit" class="form-control">
+            <option></option>
+            <option>Got it!</option>
+            <option>Word</option>
+            <option>Hand</option>
+            <option>Lure</option>
+          </select>
+        </fieldset>
+        <fieldset>
+          <label for="shsdbs-noteui-input-training-down">Down:</label>
+          <select id="shsdbs-noteui-input-training-down" class="form-control">
+            <option></option>
+            <option>Got it!</option>
+            <option>Word</option>
+            <option>Hand</option>
+            <option>Lure</option>
+          </select>
+        </fieldset>
+        <fieldset>
+          <label for="shsdbs-noteui-input-training-down">Touch:</label>
+          <select id="shsdbs-noteui-input-training-down" class="form-control">
+            <option></option>
+            <option>Got it!</option>
+            <option>Word</option>
+            <option>Hand</option>
+            <option>Lure</option>
+          </select>
+        </fieldset>
+        <fieldset>
+          <label for="shsdbs-noteui-input-training-down">Watch Me:</label>
+          <select id="shsdbs-noteui-input-training-down" class="form-control">
+            <option></option>
+            <option>Got it!</option>
+            <option>Word</option>
+            <option>Hand</option>
+            <option>Lure</option>
+          </select>
+        </fieldset>
+        <fieldset>
+          <label for="shsdbs-noteui-input-training-down">Come:</label>
+          <select id="shsdbs-noteui-input-training-down" class="form-control">
+            <option></option>
+            <option>Got it!</option>
+            <option>Word</option>
+            <option>Hand</option>
+            <option>Lure</option>
+          </select>
+        </fieldset>
+        <fieldset>
+          <label for="shsdbs-noteui-input-training-down">Stay:</label>
+          <select id="shsdbs-noteui-input-training-down" class="form-control">
+            <option></option>
+            <option>Got it!</option>
+            <option>Word</option>
+            <option>Hand</option>
+            <option>Lure</option>
+          </select>
+        </fieldset>
       </div>
-      <div class="shsdbs-noteui-section">
-        <h1>Observations</h1>
+      <h1>Observations</h1>
+      <div class="shsdbs-noteui-horizontal-section">
         <fieldset>
           <label for="shsdbs-noteui-input-looseleash">Loose Leash:</label>
-          <select id="shsdbs-noteui-input-looseleash" required>
+          <select id="shsdbs-noteui-input-looseleash" class="form-control">
             <option></option>
             <option>Loose</option>
             <option>Some pulling</option>
             <option>Lots of pulling</option>
           </select>
         </fieldset>
+        <fieldset>
+          <label for="shsdbs-noteui-input-treatdrive">Treat Drive:</label>
+          <select id="shsdbs-noteui-input-treatdrive" class="form-control">
+            <option></option>
+            <option>Low</option>
+            <option>Medium</option>
+            <option>High</option>
+          </select>
+        </fieldset>
+        <fieldset>
+          <label for="shsdbs-noteui-input-playdrive">Play Drive:</label>
+          <select id="shsdbs-noteui-input-playdrive" class="form-control">
+            <option></option>
+            <option>Low</option>
+            <option>Medium</option>
+            <option>High</option>>
+          </select>
+        </fieldset>
+        <fieldset>
+          <label for="shsdbs-noteui-input-peoplefocus">People Focus:</label>
+          <select id="shsdbs-noteui-input-peoplefocus" class="form-control">
+            <option></option>
+            <option>Low</option>
+            <option>Medium</option>
+            <option>High</option>
+          </select>
+        </fieldset>
+        <fieldset>
+          <label for="shsdbs-noteui-input-calmwithdogs">Calm with dogs:</label>
+          <select id="shsdbs-noteui-input-calmwithdogs" class="form-control">
+            <option></option>
+            <option>Calm/Ignores</option>
+            <option>Interested</option>
+            <option>Somewhat Reactive</option>
+            <option>Very Reactive</option>
+          </select>
+        </fieldset>
+        <fieldset>
+          <label for="shsdbs-noteui-input-stresslevel">Stress level:</label>
+          <select id="shsdbs-noteui-input-stresslevel" class="form-control">
+            <option></option>
+            <option>Low</option>
+            <option>Medium</option>
+            <option>High</option>
+          </select>
+        </fieldset>
+        <fieldset>
+          <label for="shsdbs-noteui-input-shyfearful">Shy/fearful:</label>
+          <select id="shsdbs-noteui-input-shyfearful" class="form-control">
+            <option></option>
+            <option>Not shy/fearful</option>
+            <option>Somewhat shy/fearful</option>
+            <option>Very shy/fearful</option>
+          </select>
+        </fieldset>
       </div>
       <div class="shsdbs-noteui-section">
         <h1>Comments</h1>
-        <textarea row="4" cols="50" style="width:98%;" class="form-control" id="shsdbs-noteui-input-comments" />
+        <textarea rows="4" cols="50" style="width:98%;" class="form-control" id="shsdbs-noteui-input-comments" />
       </div>
       <div class="shsdbs-noteui-section">
         <h1>Full note</h1>
