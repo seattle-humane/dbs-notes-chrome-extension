@@ -1,11 +1,26 @@
 #shsdbs-noteui-container input {
     display: inline;
 }
-#shsdbs-noteui-container .form-control:invalid {
+#shsdbs-noteui-container h1 {
+    padding-top: .6em;
+    font-size: 1.4em;
+}
+#shsdbs-noteui-container input:invalid {
     box-shadow: 0 0 5px 1px red;
 }
-#shsdbs-noteui-container .form-control:focus:invalid {
+#shsdbs-noteui-container select:invalid {
+    box-shadow: 0 0 5px 1px red;
+}
+#shsdbs-noteui-container input:focus:invalid {
     outline: none;
+}
+
+#shsdbs-noteui-section-header {
+    display: inline-flex;
+}
+#shsdbs-noteui-section-header fieldset {
+    display: flex;
+    margin: 20px 6px;
 }
 
 #extension-injected-page-loading-screen {

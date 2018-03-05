@@ -159,34 +159,118 @@ function replaceAnimalTabContentWithDbsNotes() {
     `);
 }
 
+function validateAtLeastOneChecked(checkboxInputName, validationElement) {
+    // From https://stackoverflow.com/a/45363898
+    $cbx_group = $(`input:checkbox[name='${checkboxInputName}']`);
+    if ($cbx_group.is(":checked")) {
+        // checkboxes become unrequired as long as one is checked
+        $cbx_group.prop("required", false).each(function() {
+            this.setCustomValidity("");
+        });
+    } else {
+        // require checkboxes and set custom validation error message
+        $cbx_group.prop("required", true).each(function() {
+            this.setCustomValidity("Please select at least one checkbox.");
+        });
+    }
+}
+
+function getSelectedCheckboxValues(checkboxName) {
+    var output = [];
+    $(`input["${checkboxName}"]:checked`).each(function() {
+        output.push(this.value);
+    });
+    return output;
+}
+
 function onNoteUiInputChange() {
+    validateAtLeastOneChecked('shsdbs-noteui-input-activity');
+
+    var volunteerLine = `${$('#shsdbs-noteui-input-yourname').val()} (${$('#shsdbs-noteui-input-dbslevel').val()}`;
+    var activityLine = getSelectedCheckboxValues('shsdbs-noteui-input-activity').join(', ');
+    var trainingLine = '**TRAINING**';
+    var output = `
+Volunteer: ${volunteerLine})
+Activity: ${activityLine}
+Training: ${trainingLine}
+Loose Leash: ${$('#shsdbs-noteui-input-looseleash').val()}
     
+${$('#shsdbs-noteui-input-comments').val()}
+        `.trim();
+    
+    console.debug('calculated new notes');
+    $('#cphSearchArea_ctrlCareActivity_ctrlCareActivityDetails_txtActivityNotes').val(output);
 }
 
 function setUpAddNoteUi() {
     var newAddNoteUi = $(`
     <div id="shsdbs-noteui-container">
-      <div>Date/Time: <div id="replace_with_original_date_time" /></div>
-      <div>
-        <label for="shsdbs-noteui-input-animalname">Animal's Name:</label>
-        <input id="shsdbs-noteui-input-animalname" class="form-control" disabled />
-      <div>
-        <label for="shsdbs-noteui-input-yourname">Your Name:</label>
-        <input id="shsdbs-noteui-input-yourname" class="form-control" autocomplete="name" required />
-      <div>Your DBS Level: </div>
-      <!-- separator -->
-      <div>Activity type: </div>
+      <div id="shsdbs-noteui-section-header">
+        <fieldset>
+          <label for="shsdbs-noteui-input-yourname">Your Name:</label>
+          <input type="text" id="shsdbs-noteui-input-yourname" class="form-control" autocomplete="name" required />
+        </fieldset>
+        <fieldset>
+          <label for="shsdbs-noteui-input-dbslevel">Your DBS Level:</label>
+          <select id="shsdbs-noteui-input-dbslevel" class="form-control" required>
+            <option value="">-- Select Level --</option>
+            <option>DBS 2</option>
+            <option>DBS 3</option>
+            <option>DBS 4</option>
+            <option>BPA</option>
+            <option>Staff</option>
+          </select>
+        </fieldset>
+        <fieldset>
+          <label for="shsdbs-noteui-input-animalname">Animal's Name:</label>
+          <input type="text" id="shsdbs-noteui-input-animalname" class="form-control" disabled />
+        </fieldset>
+        <fieldset>
+          <label for="shsdbs-noteui-input-datetime">Date/Time:</label>
+          <div id="replace_with_original_date_time" /></fieldset>
+        </fieldset>
+      </div>
+      <div class="shsdbs-noteui-section">
+        <fieldset id="shsdbs-noteui-fieldset-activity">
+          <h1>Activity</h1>
+          <input type="checkbox" name="shsdbs-noteui-input-activity" id="shsdbs-noteui-input-activity-walk" value="Walk" />
+          <label for="shsdbs-noteui-input-activity-walk">Walk</label>
+
+          <input type="checkbox" name="shsdbs-noteui-input-activity" id="shsdbs-noteui-input-activity-training" value="Training" />
+          <label for="shsdbs-noteui-input-activity-training">Training</label>
+
+          <input type="checkbox" name="shsdbs-noteui-input-activity" id="shsdbs-noteui-input-activity-play" value="Play" />
+          <label for="shsdbs-noteui-input-activity-play">Play</label>
+
+          <input type="checkbox" name="shsdbs-noteui-input-activity" id="shsdbs-noteui-input-activity-socialization" value="Socialization" />
+          <label for="shsdbs-noteui-input-activity-socialization">Socialization</label>
+
+          <input type="checkbox" name="shsdbs-noteui-input-activity" id="shsdbs-noteui-input-activity-massage" value="Massage" />
+          <label for="shsdbs-noteui-input-activity-massage">Massage</label>
+
+          <input type="checkbox" name="shsdbs-noteui-input-activity" id="shsdbs-noteui-input-activity-other" value="Other" />
+          <label for="shsdbs-noteui-input-activity-other">Other</label>
+        </fieldset>
+      </div>
       <div class="shsdbs-noteui-section">
         <h1>Training</h1>
         <div></div>
       </div>
       <div class="shsdbs-noteui-section">
         <h1>Observations</h1>
-
+        <fieldset>
+          <label for="shsdbs-noteui-input-looseleash">Loose Leash:</label>
+          <select id="shsdbs-noteui-input-looseleash" required>
+            <option></option>
+            <option>Loose</option>
+            <option>Some pulling</option>
+            <option>Lots of pulling</option>
+          </select>
+        </fieldset>
       </div>
       <div class="shsdbs-noteui-section">
         <h1>Comments</h1>
-        <textarea row="3" cols="50" style="width:98%;" class="form-control" id="shsdbs-noteui-input-comments" />
+        <textarea row="4" cols="50" style="width:98%;" class="form-control" id="shsdbs-noteui-input-comments" />
       </div>
       <div class="shsdbs-noteui-section">
         <h1>Full note</h1>
@@ -199,24 +283,26 @@ function setUpAddNoteUi() {
     var originalAddNoteUi = $('#cphSearchArea_ctrlCareActivity_ctrlCareActivityDetails_pnlActivityDetails');
 
     newAddNoteUi.find('#shsdbs-noteui-input-animalname').val(`${getSelectedAnimalName()} (${getSelectedAnimalId()})`);
-    newAddNoteUi.find('input, textarea')
-        .change(onNoteUiInputChange)
-        .css({
-        });;
+    newAddNoteUi.find('select').bind('change', onNoteUiInputChange);
+    newAddNoteUi.find('input, textarea').bind('input', onNoteUiInputChange);
+    newAddNoteUi.find('input[type=checkbox]').bind('click', onNoteUiInputChange);
 
     newAddNoteUi
         .find('#replace_with_original_date_time')
-        .replaceWith(originalAddNoteUi.find('#cphSearchArea_ctrlCareActivity_ctrlCareActivityDetails_txtStatusDate'));
+        .replaceWith($('#cphSearchArea_ctrlCareActivity_ctrlCareActivityDetails_txtStatusDate'));
     newAddNoteUi
         .find('#replace_with_original_note_areatext')
-        .replaceWith(originalAddNoteUi.find('#cphSearchArea_ctrlCareActivity_ctrlCareActivityDetails_txtActivityNotes').prop('disabled', true));
+        .replaceWith($('#cphSearchArea_ctrlCareActivity_ctrlCareActivityDetails_txtActivityNotes')
+        .prop('disabled', true)
+        .prop('rows', 12));
     newAddNoteUi
         .find('#replace_with_original_submit_button')
-        .replaceWith(originalAddNoteUi.find('#cphSearchArea_ctrlCareActivity_btnAdd'));
+        .replaceWith($('#cphSearchArea_ctrlCareActivity_btnAdd'));
 
     originalAddNoteUi.children().hide();
     originalAddNoteUi.append(newAddNoteUi);
 
+    onNoteUiInputChange();
     $('#shsdbs-noteui-input-yourname').focus();
 }
 
@@ -291,5 +377,6 @@ document.addEventListener('DOMContentLoaded', function() {
     registerCareActivityPetPointUiUpdates();
 })
 window.DOMContentLoaded
+
 
 
