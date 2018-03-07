@@ -103,7 +103,7 @@
             // Unnecessary buttons in Add Note UI
             '#cphSearchArea_ctrlCareActivity_ctrlCareActivityDetails_btnSpellCheck',
             '#cphSearchArea_ctrlCareActivity_btnSave',
-            '#cphSearchArea_ctrlCareActivity_btnClear' // doesn't actually clear fields
+            '#cphSearchArea_ctrlCareActivity_btnClear', // doesn't actually clear fields!
         ]) {
             $(selector).hide();
         }
@@ -155,11 +155,13 @@
     }
 
     function adjustCareActivityTabs() {
+        $('#cphSearchArea_ctrlCareActivity_Button1').hide(); // Person
+        $('#cphSearchArea_ctrlCareActivity_Button4').hide(); // Summary
+
         var selectedAnimalName = getSelectedAnimalName();
         if (!isAnimalSelected()) {
             console.debug('adjustCareActivityTabs (no animal selected)');
             $('#cphSearchArea_ctrlCareActivity_Button0').hide(); // Search (but by activity, not what we want)
-            $('#cphSearchArea_ctrlCareActivity_Button1').hide(); // Person
             $('#cphSearchArea_ctrlCareActivity_Button2').val('Pick an animal').click(showPageLoadingScreen); // Animal (the by-animal search UI we actually want)
             $('#cphSearchArea_ctrlCareActivity_Button3').hide(); // Details
         } else {
@@ -172,8 +174,8 @@
                 window.location.href = 'CareActivityTab.aspx?CreateActivity=1'
             });
             
-            $('#cphSearchArea_ctrlCareActivity_Button1').hide(); // Person
             $('#cphSearchArea_ctrlCareActivity_Button2').val(`Read ${selectedAnimalName}'s notes`).click(showPageLoadingScreen); // Animal
+
             $('#cphSearchArea_ctrlCareActivity_Button3').val(`Add new note for ${selectedAnimalName}`).click(showPageLoadingScreen); // Details
         }
     }
@@ -474,7 +476,7 @@ ${comments}
             <h1>Comments</h1>
             <textarea rows="4" cols="50" style="width:98%;" class="form-control" id="shsdbs-noteui-input-comments" />
         </div>
-        <div class="shsdbs-noteui-section">
+        <div class="shsdbs-noteui-section shsdbs-debug-only">
             <h1>Full note</h1>
             <textarea id="replace_with_original_note_areatext" />
         </div>
@@ -508,6 +510,12 @@ ${comments}
         $('#shsdbs-noteui-input-yourname').focus();
     }
 
+    function replaceSummaryTabContentWithConfirmationText() {
+        $('#cphSearchArea_ctrlCareActivity_tabNavigation4').children().hide();
+        $('#cphSearchArea_ctrlCareActivity_tabNavigation4').append(
+            $(`<h1>Added a note for ${getSelectedAnimalName()}!</h1>`))
+    }
+
     function onCareActivityPanelUpdate() {
         console.debug('onCareActivityPanelUpdate');
         hideUnnecessaryCareActivityUi();
@@ -516,6 +524,7 @@ ${comments}
         setAnimalSearchCriteriaDefaultsOnce();
         setCareActivityDetailsDefaults();
         setUpAddNoteUi();
+        replaceSummaryTabContentWithConfirmationText();
         hidePageLoadingScreen();
     }
 
