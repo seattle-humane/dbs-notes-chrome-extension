@@ -1,10 +1,10 @@
 (function() {
     function preventSessionTimeoutOnce() {
+        console.debug('preventSessionTimeoutOnce faking a key press');
         var fakeKeypressEventThatSatisfiesPageReqMgrJsHandler = {target: { focus: function() { } } }
         document.onkeypress(fakeKeypressEventThatSatisfiesPageReqMgrJsHandler);
     }
     function preventSessionTimeout() {
-        console.debug('preventSessionTimeout');
         setInterval(preventSessionTimeoutOnce, 30000);
     }
 
