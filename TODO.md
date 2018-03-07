@@ -9,6 +9,6 @@
 8. [done] Suppress unnecessary PetPoint elements (main nav menu especially)
 9. Make a 1-click "generate DBS list" button
 10. [done] Avoid overriding user selections of Name/Active Only search settings
-11. Add 'Seattle Humane DBS' logo alongside PetPoint's
+11. [cut] Add 'Seattle Humane DBS' logo alongside PetPoint's
 12. Make a settings page (DBS mode vs BPA mode vs Other mode)
 13. [done] Suppress in-progress page rendering until we make our updates

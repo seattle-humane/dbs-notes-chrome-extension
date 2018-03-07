@@ -39,6 +39,10 @@
     display: none;
 }
 
+#shsdbs-notes-button {
+    margin: 20px;
+}
+
 /*
   This serves to prevent the UI flashing around between PetPoint loading in
   and our javascript finishing up with subsequent DOM manipulations.

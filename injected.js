@@ -197,7 +197,7 @@
         `);
         */
 
-        var openDbsNotesButton = $('<input type="button" value="Open DBS Notes in new tab" />').bind('click', openDbsNotesPopup);
+        var openDbsNotesButton = $('<input type="button" class="button_green" id="shsdbs-notes-button" value="Open DBS Notes in new tab" />').bind('click', openDbsNotesPopup);
 
         animalTabContentContainer.children().hide();
         animalTabContentContainer.append(openDbsNotesButton);
