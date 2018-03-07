@@ -570,5 +570,3 @@ ${comments}
     console.debug('Seattle Humane extension setup complete');
     $('body').show();
 })();
-
-
