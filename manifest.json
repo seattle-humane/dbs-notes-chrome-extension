@@ -15,14 +15,14 @@
     },
     "content_scripts": [
         {
-            "matches": ["https://sms.petpoint.com/sms3/*"],
-            "js": ["script/content_script.js"],
-            "css": ["css/injected_css.css"],
-            "run_at": "document_start"
+            "matches": ["https://sms.petpoint.com/sms3/forms/CareActivityTab.aspx*"],
+            "js": ["content.js"],
+            "css": ["styles.css"],
+            "run_at": "document_end"
         }
     ],
     "web_accessible_resources": [
-        "script/injected_script.js",
-        "css/injected_css.js"
+        "injected.js",
+        "styles.css"
     ]
   }
