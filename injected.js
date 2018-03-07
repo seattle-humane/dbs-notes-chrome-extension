@@ -195,9 +195,10 @@
         `);
         */
 
-        animalTabContentContainer.html(`
-            <input type="button" onclick="openDbsNotesPopup()" value="Open DBS Notes in new tab" />
-        `);
+        var openDbsNotesButton = $('<input type="button" value="Open DBS Notes in new tab" />').bind('click', openDbsNotesPopup);
+
+        animalTabContentContainer.children().hide();
+        animalTabContentContainer.append(openDbsNotesButton);
     }
 
     function validateAtLeastOneChecked(checkboxInputName, validationElement) {
@@ -218,29 +219,75 @@
 
     function getSelectedCheckboxValues(checkboxName) {
         var output = [];
-        $(`input["${checkboxName}"]:checked`).each(function() {
+        $(`input[name="${checkboxName}"]:checked`).each(function() {
             output.push(this.value);
         });
         return output;
     }
 
+    // Returns an object with a property for each <select> in the container that
+    // maps from its <label> text to the selected <option>'s text
+    //
+    // Omits cases where the selected option's text or value is ''
+    //
+    // Requires each <select id="foo"> have a corresponding <label for="foo">
+    function getSelectBoxValues(selectContainerElement) {
+        var output = {};
+        selectContainerElement.find('select').each(function() {
+            var selectElement = $(this);
+            var selectId = selectElement.attr('id')
+            
+            var labelElement = selectContainerElement.find(`label[for="${selectId}"]`);
+            var labelText = labelElement.text().trim().replace(/:$/, '');
+
+            var selectedOptionElement = selectElement.find('option:selected');
+            var selectedOptionValue = selectedOptionElement.val() || selectedOptionElement.text();
+            if (selectedOptionValue == '') {
+                return;
+            }
+
+            output[labelText] = selectedOptionValue;
+        });
+        return output;
+    }
+
+    function getTrainingSummary() {
+        var selectedValues = getSelectBoxValues($('#shsdbs-noteui-training'));
+        return Object.entries(selectedValues).map(function(labelValuePair) {
+            return `${labelValuePair[0]} (${labelValuePair[1]})`;
+        }).join(', ') || 'n/a';
+    }
+
+    function getObservationsSummary() {
+        var selectedValues = getSelectBoxValues($('#shsdbs-noteui-observations'));
+        return Object.entries(selectedValues).map(function(labelValuePair) {
+            return `${labelValuePair[0]}: ${labelValuePair[1]}`;
+        }).join(', ');
+    }
+
+    function recalculateRawNotesFromNoteUi() {
+        var volunteerName = $('#shsdbs-noteui-input-yourname').val();
+        var dbsLevel = $('#shsdbs-noteui-input-dbslevel').val();
+        var activitySummary = getSelectedCheckboxValues('shsdbs-noteui-input-activity').join(', ');
+        var trainingSummary = getTrainingSummary();
+        var observationsSummary = getObservationsSummary();
+        var comments = $('#shsdbs-noteui-input-comments').val();
+        
+        return `
+${activitySummary} (${volunteerName}, ${dbsLevel})
+Training: ${trainingSummary}
+${observationsSummary}
+
+${comments}
+            `.trim();
+    }
+
     function onNoteUiInputChange() {
         validateAtLeastOneChecked('shsdbs-noteui-input-activity');
 
-        var volunteerLine = `${$('#shsdbs-noteui-input-yourname').val()} (${$('#shsdbs-noteui-input-dbslevel').val()}`;
-        var activityLine = getSelectedCheckboxValues('shsdbs-noteui-input-activity').join(', ');
-        var trainingLine = '**TRAINING**';
-        var output = `
-    Volunteer: ${volunteerLine})
-    Activity: ${activityLine}
-    Training: ${trainingLine}
-    Loose Leash: ${$('#shsdbs-noteui-input-looseleash').val()}
-        
-    ${$('#shsdbs-noteui-input-comments').val()}
-            `.trim();
-        
-        console.debug('calculated new notes');
-        $('#cphSearchArea_ctrlCareActivity_ctrlCareActivityDetails_txtActivityNotes').val(output);
+        var notes = recalculateRawNotesFromNoteUi();
+        console.debug('recalculated notes');
+        $('#cphSearchArea_ctrlCareActivity_ctrlCareActivityDetails_txtActivityNotes').val(notes);
     }
 
     function setUpAddNoteUi() {
@@ -294,7 +341,7 @@
             </fieldset>
         </div>
         <h1>Training</h1>
-        <div class="shsdbs-noteui-horizontal-section">
+        <div id="shsdbs-noteui-training" class="shsdbs-noteui-horizontal-section">
             <fieldset>
             <label for="shsdbs-noteui-input-training-sit">Sit:</label>
             <select id="shsdbs-noteui-input-training-sit" class="form-control">
@@ -316,8 +363,8 @@
             </select>
             </fieldset>
             <fieldset>
-            <label for="shsdbs-noteui-input-training-down">Touch:</label>
-            <select id="shsdbs-noteui-input-training-down" class="form-control">
+            <label for="shsdbs-noteui-input-training-touch">Touch:</label>
+            <select id="shsdbs-noteui-input-training-touch" class="form-control">
                 <option></option>
                 <option>Got it!</option>
                 <option>Word</option>
@@ -326,8 +373,8 @@
             </select>
             </fieldset>
             <fieldset>
-            <label for="shsdbs-noteui-input-training-down">Watch Me:</label>
-            <select id="shsdbs-noteui-input-training-down" class="form-control">
+            <label for="shsdbs-noteui-input-training-watchme">Watch Me:</label>
+            <select id="shsdbs-noteui-input-training-watchme" class="form-control">
                 <option></option>
                 <option>Got it!</option>
                 <option>Word</option>
@@ -336,8 +383,8 @@
             </select>
             </fieldset>
             <fieldset>
-            <label for="shsdbs-noteui-input-training-down">Come:</label>
-            <select id="shsdbs-noteui-input-training-down" class="form-control">
+            <label for="shsdbs-noteui-input-training-come">Come:</label>
+            <select id="shsdbs-noteui-input-training-come" class="form-control">
                 <option></option>
                 <option>Got it!</option>
                 <option>Word</option>
@@ -346,8 +393,8 @@
             </select>
             </fieldset>
             <fieldset>
-            <label for="shsdbs-noteui-input-training-down">Stay:</label>
-            <select id="shsdbs-noteui-input-training-down" class="form-control">
+            <label for="shsdbs-noteui-input-training-stay">Stay:</label>
+            <select id="shsdbs-noteui-input-training-stay" class="form-control">
                 <option></option>
                 <option>Got it!</option>
                 <option>Word</option>
@@ -357,12 +404,12 @@
             </fieldset>
         </div>
         <h1>Observations</h1>
-        <div class="shsdbs-noteui-horizontal-section">
+        <div id="shsdbs-noteui-observations" class="shsdbs-noteui-horizontal-section">
             <fieldset>
-            <label for="shsdbs-noteui-input-looseleash">Loose Leash:</label>
+            <label for="shsdbs-noteui-input-looseleash">On Leash:</label>
             <select id="shsdbs-noteui-input-looseleash" class="form-control">
                 <option></option>
-                <option>Loose</option>
+                <option>Loose leash</option>
                 <option>Some pulling</option>
                 <option>Lots of pulling</option>
             </select>
@@ -387,7 +434,7 @@
             </fieldset>
             <fieldset>
             <label for="shsdbs-noteui-input-peoplefocus">People Focus:</label>
-            <select id="shsdbs-noteui-input-peoplefocus" class="form-control">
+            <select id="shsdbs-noteui-input-peoplefocus" class="form-control" required>
                 <option></option>
                 <option>Low</option>
                 <option>Medium</option>
@@ -395,8 +442,8 @@
             </select>
             </fieldset>
             <fieldset>
-            <label for="shsdbs-noteui-input-calmwithdogs">Calm with dogs:</label>
-            <select id="shsdbs-noteui-input-calmwithdogs" class="form-control">
+            <label for="shsdbs-noteui-input-otherdogs">Other Dogs:</label>
+            <select id="shsdbs-noteui-input-otherdogs" class="form-control">
                 <option></option>
                 <option>Calm/Ignores</option>
                 <option>Interested</option>
@@ -406,7 +453,7 @@
             </fieldset>
             <fieldset>
             <label for="shsdbs-noteui-input-stresslevel">Stress level:</label>
-            <select id="shsdbs-noteui-input-stresslevel" class="form-control">
+            <select id="shsdbs-noteui-input-stresslevel" class="form-control" required>
                 <option></option>
                 <option>Low</option>
                 <option>Medium</option>
@@ -414,12 +461,12 @@
             </select>
             </fieldset>
             <fieldset>
-            <label for="shsdbs-noteui-input-shyfearful">Shy/fearful:</label>
-            <select id="shsdbs-noteui-input-shyfearful" class="form-control">
+            <label for="shsdbs-noteui-input-shyfearful">Shyness/fearfulness:</label>
+            <select id="shsdbs-noteui-input-shyfearful" class="form-control" required>
                 <option></option>
-                <option>Not shy/fearful</option>
-                <option>Somewhat shy/fearful</option>
-                <option>Very shy/fearful</option>
+                <option>Low</option>
+                <option>Medium</option>
+                <option>High</option>
             </select>
             </fieldset>
         </div>
