@@ -4,7 +4,7 @@
     "name": "Seattle Humane DBS PetPoint Extension",
     "description": "Adds Seattle Humane DBS specific functionality on top of the PetPoint frontend.",
     "author": "Seattle Humane Engineering <seattlehumaneengineering@gmail.com>",
-    "version": "1.0",
+    "version": "1.1",
 
     "icons": {
         "16": "images/icon-16x16.png",
