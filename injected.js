@@ -158,6 +158,10 @@
         $('#cphSearchArea_ctrlCareActivity_Button1').hide(); // Person
         $('#cphSearchArea_ctrlCareActivity_Button4').hide(); // Summary
 
+        $('#cphSearchArea_ctrlCareActivity_Button0').attr('formnovalidate', 'formnovalidate');
+        $('#cphSearchArea_ctrlCareActivity_Button2').attr('formnovalidate', 'formnovalidate');
+        $('#cphSearchArea_ctrlCareActivity_Button3').attr('formnovalidate', 'formnovalidate');
+
         var selectedAnimalName = getSelectedAnimalName();
         if (!isAnimalSelected()) {
             console.debug('adjustCareActivityTabs (no animal selected)');
