@@ -7,8 +7,8 @@
     "dot-json": "^1.0.3"
   },
   "scripts": {
-    "deploy-new-version": "npm run update-version && npm run release-cws",
     "release": "cd browser && webstore upload --extension-id nmipgmhcfnopjeppkmpleiejmmlcfemh --auto-publish",
-    "update-version": "dot-json browser/manifest.json version $(dot-json browser/manifest.json version).$TRAVIS_BUILD_NUMBER"
+    "travis-deploy": "npm run update-version-with-travis-build-number && npm run release",
+    "update-version-with-travis-build-number": "dot-json browser/manifest.json version $(dot-json browser/manifest.json version).$TRAVIS_BUILD_NUMBER"
   }
 }
