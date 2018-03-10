@@ -4,11 +4,10 @@ node_js:
 branches:
   only: master
 env:
-  - EXTENSION_ID=nmipgmhcfnopjeppkmpleiejmmlcfemh
-  - EXTENSION_VERSION=1.1.0.$TRAVIS_BUILD_NUMBER
+  - EXTENSION_VERSION=1.1.0
 deploy:
   provider: script
   skip_cleanup: true
-  script: npm run deploy-new-version
+  script: npm run travis-deploy
   on:
     branch: master

@@ -8,7 +8,7 @@
   },
   "scripts": {
     "deploy-new-version": "npm run update-version && npm run release-cws",
-    "release": "cd browser && webstore upload --auto-publish",
-    "update-version": "dot-json browser/manifest.json version $EXTENSION_VERSION"
+    "release": "cd browser && webstore upload --extension-id nmipgmhcfnopjeppkmpleiejmmlcfemh --auto-publish",
+    "update-version": "dot-json browser/manifest.json version $(dot-json browser/manifest.json version).$TRAVIS_BUILD_NUMBER"
   }
 }
