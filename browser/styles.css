@@ -5,7 +5,18 @@
     padding-top: .6em;
     font-size: 1.4em;
 }
-
+#shsdbs-noteui-fieldset-activity {
+    margin-left: 6px;
+}
+#shsdbs-noteui-input-comments {
+    margin-left: 6px;   
+}
+#shsdbs-noteui-flagforstaff {
+    margin-left: 6px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    font-size: 1.2em;
+}
 #shsdbs-noteui-container input:invalid {
     box-shadow: 0 0 5px 1px red;
 }
