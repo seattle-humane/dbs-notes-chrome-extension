@@ -1,0 +1,13 @@
+language: node_js
+node_js:
+  - 'node'
+branches:
+  only: master
+env:
+  - EXTENSION_ID=nmipgmhcfnopjeppkmpleiejmmlcfemh
+deploy:
+  provider: script
+  skip_cleanup: true
+  script: npm run deploy-new-version
+  on:
+    branch: master
