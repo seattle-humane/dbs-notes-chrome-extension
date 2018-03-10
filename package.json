@@ -9,6 +9,6 @@
   "scripts": {
     "deploy-new-version": "npm run update-version && npm run release-cws",
     "release": "cd browser && webstore upload --auto-publish",
-    "update-version": "dot-json browser/manifest.json version $(date -u +%y.%-m.%-d.%-H%M)"
+    "update-version": "dot-json browser/manifest.json version $EXTENSION_VERSION"
   }
 }

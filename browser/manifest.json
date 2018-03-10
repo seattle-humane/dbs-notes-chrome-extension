@@ -1,28 +1,32 @@
 {
-    "manifest_version": 2,
-  
-    "name": "Seattle Humane DBS PetPoint Extension",
-    "description": "Adds Seattle Humane DBS specific functionality on top of the PetPoint frontend.",
-    "author": "Seattle Humane Engineering <seattlehumaneengineering@gmail.com>",
-    "version": "1.1",
-
-    "icons": {
-        "16": "images/icon-16x16.png",
-        "24": "images/icon-24x24.png",
-        "32": "images/icon-32x32.png",
-        "64": "images/icon-64x64.png",
-        "128": "images/icon-128x128.png"
-    },
-    "content_scripts": [
-        {
-            "matches": ["https://sms.petpoint.com/sms3/forms/CareActivityTab.aspx*"],
-            "js": ["content.js"],
-            "css": ["styles.css"],
-            "run_at": "document_end"
-        }
-    ],
-    "web_accessible_resources": [
-        "injected.js",
+  "manifest_version": 2,
+  "name": "Seattle Humane DBS PetPoint Extension",
+  "description": "Adds Seattle Humane DBS specific functionality on top of the PetPoint frontend.",
+  "author": "Seattle Humane Engineering <seattlehumaneengineering@gmail.com>",
+  "version": "!!! This is set per-build from .travis.yml and 'npm run update-version' !!!",
+  "icons": {
+    "16": "images/icon-16x16.png",
+    "24": "images/icon-24x24.png",
+    "32": "images/icon-32x32.png",
+    "64": "images/icon-64x64.png",
+    "128": "images/icon-128x128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://sms.petpoint.com/sms3/forms/CareActivityTab.aspx*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "css": [
         "styles.css"
-    ]
-  }
+      ],
+      "run_at": "document_end"
+    }
+  ],
+  "web_accessible_resources": [
+    "injected.js",
+    "styles.css"
+  ]
+}
