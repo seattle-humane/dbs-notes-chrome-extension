@@ -104,6 +104,8 @@
             '#cphSearchArea_ctrlCareActivity_ctrlCareActivityDetails_btnSpellCheck',
             '#cphSearchArea_ctrlCareActivity_btnSave',
             '#cphSearchArea_ctrlCareActivity_btnClear', // doesn't actually clear fields!
+            // 'Not authorized to edit Animal records' message (only shows up on some accounts!)
+            '#cphSearchArea_ctrlCareActivity_plhNotAuthorizedMessage'
         ]) {
             $(selector).hide();
         }
