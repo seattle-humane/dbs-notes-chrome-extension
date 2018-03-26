@@ -233,6 +233,12 @@
         return output;
     }
 
+    function setSelectedCheckboxValues(root, checkboxName, selectedValues) {
+        root.find(`input[name="${checkboxName}"]`).each(function() {
+            $(this).prop('checked', (selectedValues.indexOf(this.value) != -1));
+        });
+    }
+
     // Returns an object with a property for each <select> in the container that
     // maps from its <label> text to the selected <option>'s text
     //
@@ -259,45 +265,82 @@
         return output;
     }
 
-    function getTrainingSummary() {
-        var selectedValues = getSelectBoxValues($('#shsdbs-noteui-training'));
-        return Object.entries(selectedValues).map(function(labelValuePair) {
+    function setSelectBoxValues(selectContainerElement, selectedValues) {
+        selectContainerElement.find('select').each(function() {
+            var selectElement = $(this);
+            var selectId = selectElement.attr('id')
+            
+            var labelElement = selectContainerElement.find(`label[for="${selectId}"]`);
+            var labelText = labelElement.text().trim().replace(/:$/, '');
+
+            var selectedOptionValue = selectedValues[labelText];
+            if (selectedOptionValue) {
+                var selectedOptionElement = selectElement.find(`option:contains(${selectedOptionValue})`)
+                selectedOptionElement.prop('selected', true);
+            }
+        });
+    }
+
+    function getTrainingSummary(trainingSelectBoxValues) {
+        return Object.entries(trainingSelectBoxValues).map(function(labelValuePair) {
             return `${labelValuePair[0]} (${labelValuePair[1]})`;
         }).join(', ') || 'n/a';
     }
 
-    function getObservationsSummary() {
-        var selectedValues = getSelectBoxValues($('#shsdbs-noteui-observations'));
-        return Object.entries(selectedValues).map(function(labelValuePair) {
+    function getObservationsSummary(observationSelectBoxValues) {
+        return Object.entries(observationSelectBoxValues).map(function(labelValuePair) {
             return `${labelValuePair[0]}: ${labelValuePair[1]}`;
         }).join(', ');
     }
 
-    function recalculateRawNotesFromNoteUi() {
-        var flagForStaff = $('#shsdbs-noteui-input-flagforstaff').is(':checked') ? '!!! FLAGGED FOR STAFF REVIEW !!!' : '';
-        var volunteerName = $('#shsdbs-noteui-input-yourname').val();
-        var dbsLevel = $('#shsdbs-noteui-input-dbslevel').val();
-        var activitySummary = getSelectedCheckboxValues('shsdbs-noteui-input-activity').join(', ');
-        var trainingSummary = getTrainingSummary();
-        var observationsSummary = getObservationsSummary();
-        var comments = $('#shsdbs-noteui-input-comments').val();
+    function formatCareActivityNote(noteUiState) {
+        // This exact value must remain stable for several report builder reports to work
+        var formattedFlagForStaff = noteUiState.flagForStaff ? '!!! FLAGGED FOR STAFF REVIEW !!!' : '';
+
+        var activitySummary = noteUiState.activities.join(', ');
+        var trainingSummary = getTrainingSummary(noteUiState.training);
+        var observationsSummary = getObservationsSummary(noteUiState.observations);
         
         return `
-${flagForStaff}
-${activitySummary} (${volunteerName}, ${dbsLevel})
+${formattedFlagForStaff}
+${activitySummary} (${noteUiState.volunteerName}, ${noteUiState.volunteerRole})
 Training: ${trainingSummary}
 ${observationsSummary}
 
-${comments}
+${noteUiState.comments}
             `.trim();
     }
+
+    function getNoteUiState() {
+        return {
+            volunteerName: $('#shsdbs-noteui-input-yourname').val(),
+            volunteerRole: $('#shsdbs-noteui-input-dbslevel').val(),
+            activities: getSelectedCheckboxValues('shsdbs-noteui-input-activity'),
+            training: getSelectBoxValues($('#shsdbs-noteui-training')),
+            observations: getSelectBoxValues($('#shsdbs-noteui-observations')),
+            comments: $('#shsdbs-noteui-input-comments').val(),
+            flagForStaff: $('#shsdbs-noteui-input-flagforstaff').is(':checked'),
+        };
+    }
+
+    function setNoteUiState(noteUi, state) {
+        noteUi.find('#shsdbs-noteui-input-yourname').val(state.volunteerName);
+        noteUi.find('#shsdbs-noteui-input-dbslevel').val(state.volunteerRole);
+        setSelectedCheckboxValues(noteUi, 'shsdbs-noteui-input-activity', state.activities);
+        setSelectBoxValues(noteUi.find('#shsdbs-noteui-training'), state.training);
+        setSelectBoxValues(noteUi.find('#shsdbs-noteui-observations'), state.observations);
+        noteUi.find('#shsdbs-noteui-input-comments').val(state.comments);
+        noteUi.find('#shsdbs-noteui-input-flagforstaff').prop('checked', state.flagForStaff);
+    }
+
+    g_lastNoteUiState = null;
 
     function onNoteUiInputChange() {
         validateAtLeastOneChecked('shsdbs-noteui-input-activity');
 
-        var notes = recalculateRawNotesFromNoteUi();
-        console.debug('recalculated notes');
-        $('#cphSearchArea_ctrlCareActivity_ctrlCareActivityDetails_txtActivityNotes').val(notes);
+        g_lastNoteUiState = getNoteUiState();
+        var formattedNotes = formatCareActivityNote(g_lastNoteUiState);
+        $('#cphSearchArea_ctrlCareActivity_ctrlCareActivityDetails_txtActivityNotes').val(formattedNotes);
     }
 
     function setUpAddNoteUi() {
@@ -580,6 +623,10 @@ ${comments}
             .find('#replace_with_original_submit_button')
             .replaceWith($('#cphSearchArea_ctrlCareActivity_btnAdd'));
 
+        if (g_lastNoteUiState !== null) {
+            setNoteUiState(newAddNoteUi, g_lastNoteUiState);
+        }
+        
         originalAddNoteUi.children().hide();
         originalAddNoteUi.append(newAddNoteUi);
 
