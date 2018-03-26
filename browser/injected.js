@@ -406,7 +406,6 @@ ${noteUiState.comments}
             <label for="shsdbs-noteui-input-training-touch">Touch:</label>
             <select id="shsdbs-noteui-input-training-touch" class="form-control">
                 <option></option>
-                <option>Got it!</option>
                 <option>Word</option>
                 <option>Hand</option>
                 <option>Lure</option>
@@ -416,7 +415,6 @@ ${noteUiState.comments}
             <label for="shsdbs-noteui-input-training-sit">Sit:</label>
             <select id="shsdbs-noteui-input-training-sit" class="form-control">
                 <option></option>
-                <option>Got it!</option>
                 <option>Word</option>
                 <option>Hand</option>
                 <option>Lure</option>
@@ -426,7 +424,6 @@ ${noteUiState.comments}
             <label for="shsdbs-noteui-input-training-come">Come:</label>
             <select id="shsdbs-noteui-input-training-come" class="form-control">
                 <option></option>
-                <option>Got it!</option>
                 <option>Word</option>
                 <option>Hand</option>
                 <option>Lure</option>
@@ -436,7 +433,6 @@ ${noteUiState.comments}
             <label for="shsdbs-noteui-input-training-watchme">Watch Me:</label>
             <select id="shsdbs-noteui-input-training-watchme" class="form-control">
                 <option></option>
-                <option>Got it!</option>
                 <option>Word</option>
                 <option>Hand</option>
                 <option>Lure</option>
@@ -446,7 +442,6 @@ ${noteUiState.comments}
             <label for="shsdbs-noteui-input-training-wait">Wait:</label>
             <select id="shsdbs-noteui-input-training-wait" class="form-control">
                 <option></option>
-                <option>Got it!</option>
                 <option>Word</option>
                 <option>Hand</option>
                 <option>Lure</option>
@@ -456,7 +451,6 @@ ${noteUiState.comments}
             <label for="shsdbs-noteui-input-training-down">Down:</label>
             <select id="shsdbs-noteui-input-training-down" class="form-control">
                 <option></option>
-                <option>Got it!</option>
                 <option>Word</option>
                 <option>Hand</option>
                 <option>Lure</option>
@@ -466,7 +460,6 @@ ${noteUiState.comments}
             <label for="shsdbs-noteui-input-training-leaveit">Leave It:</label>
             <select id="shsdbs-noteui-input-training-leaveit" class="form-control">
                 <option></option>
-                <option>Got it!</option>
                 <option>Word</option>
                 <option>Hand</option>
                 <option>Lure</option>
@@ -476,7 +469,6 @@ ${noteUiState.comments}
             <label for="shsdbs-noteui-input-training-dropit">Drop It:</label>
             <select id="shsdbs-noteui-input-training-dropit" class="form-control">
                 <option></option>
-                <option>Got it!</option>
                 <option>Word</option>
                 <option>Hand</option>
                 <option>Lure</option>
@@ -486,7 +478,6 @@ ${noteUiState.comments}
             <label for="shsdbs-noteui-input-training-takeit">Take It:</label>
             <select id="shsdbs-noteui-input-training-takeit" class="form-control">
                 <option></option>
-                <option>Got it!</option>
                 <option>Word</option>
                 <option>Hand</option>
                 <option>Lure</option>
@@ -496,7 +487,6 @@ ${noteUiState.comments}
             <label for="shsdbs-noteui-input-training-stay">Stay:</label>
             <select id="shsdbs-noteui-input-training-stay" class="form-control">
                 <option></option>
-                <option>Got it!</option>
                 <option>Word</option>
                 <option>Hand</option>
                 <option>Lure</option>
@@ -506,7 +496,6 @@ ${noteUiState.comments}
             <label for="shsdbs-noteui-input-training-shake">Shake/Hi-5:</label>
             <select id="shsdbs-noteui-input-training-shake" class="form-control">
                 <option></option>
-                <option>Got it!</option>
                 <option>Word</option>
                 <option>Hand</option>
                 <option>Lure</option>
