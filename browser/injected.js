@@ -390,6 +390,9 @@ ${noteUiState.comments}
             <input type="checkbox" name="shsdbs-noteui-input-activity" id="shsdbs-noteui-input-activity-massage" value="Massage" />
             <label for="shsdbs-noteui-input-activity-massage">Massage</label>
 
+            <input type="checkbox" name="shsdbs-noteui-input-activity" id="shsdbs-noteui-input-activity-nosework" value="Nosework" />
+            <label for="shsdbs-noteui-input-activity-nosework">Nosework</label>
+
             <input type="checkbox" name="shsdbs-noteui-input-activity" id="shsdbs-noteui-input-activity-run" value="Run" />
             <label for="shsdbs-noteui-input-activity-run">Run</label>
 
