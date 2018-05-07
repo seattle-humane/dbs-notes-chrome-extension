@@ -8,10 +8,23 @@
         setInterval(preventSessionTimeoutOnce, 30000);
     }
 
+    function addNotesButtonToNavMenu() {
+        var navMenuList = $('#ctl00_MenuPP ul.rmRootGroup');
+        navMenuList.prepend(`
+            <li class="shsdbs-main-nav-item">
+                <a href="CareActivityTab.aspx?CreateActivity=1">
+                    <span>Exercise Notes</span>
+                </a>
+            </li>
+        `);
+    }
+
     function registerSiteWidePetPointUiUpdates() {
         console.debug('registerSiteWidePetPointUiUpdates');
-        $('div.master_menuholder').hide();
-        $('a#aLogo').attr('href', 'CareActivityTab.aspx?CreateActivity=1')
+        addNotesButtonToNavMenu();
+        $('ul.rmRootGroup')
+        //$('div.master_menuholder').hide();
+        //$('a#aLogo').attr('href', 'CareActivityTab.aspx?CreateActivity=1')
     }
     
     // returns whether a change() was induced
