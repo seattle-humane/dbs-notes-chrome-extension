@@ -108,8 +108,11 @@
 }
 
 /*
-  This serves to prevent the UI flashing around between PetPoint loading in
-  and our javascript finishing up with subsequent DOM manipulations.
+  This is a hack to prevent the UI flashing around between PetPoint loading in
+  and our javascript finishing up with subsequent DOM manipulations. It is unset
+  in exercise_notes.js. We do the initial hide here instead of in the js because
+  Chrome more reliably picks it up before the PetPoint JS starts executing like
+  this.
  */
 body {
     display: none;

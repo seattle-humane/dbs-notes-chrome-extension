@@ -11,7 +11,8 @@
 import * as utils from './utils.js';
 
 function addNotesButtonToNavMenu() {
-    var navMenuList = $('#ctl00_MenuPP ul.rmRootGroup');
+    let navMenuList = $('#ctl00_MenuPP ul.rmRootGroup');
+
     navMenuList.prepend(`
         <li class="shsdbs-main-nav-item">
             <a href="CareActivityTab.aspx?CreateActivity=1">
@@ -19,27 +20,25 @@ function addNotesButtonToNavMenu() {
             </a>
         </li>
     `);
-
-    // TODO: it would be nice for this to remove the 2 original sub-menu items from the Care nav menu
 }
 
 function setCareActivityDetailsDefaults() {
     console.debug('setCareActivityDetailsDefaults');
-    var categorySelectElement = $('#cphSearchArea_ctrlCareActivity_ctrlCareActivityDetails_ddlPMCategory');
+    let categorySelectElement = $('#cphSearchArea_ctrlCareActivity_ctrlCareActivityDetails_ddlPMCategory');
 
     if (categorySelectElement.length === 0) {
         console.debug('setCareActivityDetailsDefaults: Not on care activity details page, skipping');
         return;
     }
 
-    var changedCategory = utils.changeSelectElementToValueWithText(categorySelectElement, 'DBS');
+    let changedCategory = utils.changeSelectElementToValueWithText(categorySelectElement, 'DBS');
     if (changedCategory) {
         console.debug('setCareActivityDetailsDefaults: Modified category, waiting for panel update to continue');
         return; // need to wait for a new panel update to repopulate type before we can change it
     }
     
-    var typeSelectElement = $('#cphSearchArea_ctrlCareActivity_ctrlCareActivityDetails_ddlPMActivityType');
-    var changedType = utils.changeSelectElementToValueWithText(typeSelectElement, 'Other');
+    let typeSelectElement = $('#cphSearchArea_ctrlCareActivity_ctrlCareActivityDetails_ddlPMActivityType');
+    let changedType = utils.changeSelectElementToValueWithText(typeSelectElement, 'Other');
     if (changedType) {
         console.debug('setCareActivityDetailsDefaults: Modified type');
     }
@@ -88,15 +87,15 @@ function isAnimalSelected() {
 }
 function openDbsNotesPopup() {
     // Ideally we'd replace this with an iframe, pending a support request to have the custom document renderable via https
-    var id = getSelectedAnimalIdNumber();
+    let id = getSelectedAnimalIdNumber();
     window.open(`../embeddedreports/CustomDocument.aspx?document=CustomAnimalDocument,DBS Notes,${id}`);
 }
 
 function getSelectedAnimalField(columnIndex, expectedColumnName) {
     // PetPoint ID dependencies
-    var selectedAnimalsTable = $('#cphSearchArea_ctrlCareActivity_ctrlCareActivityAnimalList_dgAnimals');
-    var headerCells = selectedAnimalsTable.find('tr.grid_header td');
-    var dataCells = selectedAnimalsTable.find('tr.grid_row td');
+    let selectedAnimalsTable = $('#cphSearchArea_ctrlCareActivity_ctrlCareActivityAnimalList_dgAnimals');
+    let headerCells = selectedAnimalsTable.find('tr.grid_header td');
+    let dataCells = selectedAnimalsTable.find('tr.grid_row td');
     
     // Selection logic
     if (selectedAnimalsTable.length === 0) {
@@ -104,7 +103,7 @@ function getSelectedAnimalField(columnIndex, expectedColumnName) {
         return '';
     }
     
-    var nameColumnHeaderText = $(headerCells[columnIndex]).text();
+    let nameColumnHeaderText = $(headerCells[columnIndex]).text();
     if (nameColumnHeaderText != expectedColumnName) {
         console.error(`getSelectedAnimalField: expected column ${columnIndex} to be ${expectedColumnName} but was ${columnIndex}`)
         return '';
@@ -126,7 +125,7 @@ function adjustCareActivityTabs() {
     $('#cphSearchArea_ctrlCareActivity_Button2').attr('formnovalidate', 'formnovalidate');
     $('#cphSearchArea_ctrlCareActivity_Button3').attr('formnovalidate', 'formnovalidate');
 
-    var selectedAnimalName = getSelectedAnimalName();
+    let selectedAnimalName = getSelectedAnimalName();
     if (!isAnimalSelected()) {
         console.debug('adjustCareActivityTabs (no animal selected)');
         $('#cphSearchArea_ctrlCareActivity_Button0').hide(); // Search (but by activity, not what we want)
@@ -149,7 +148,7 @@ function adjustCareActivityTabs() {
 }
 
 function replaceAnimalTabContentWithDbsNotes() {
-    var animalTabContentContainer = $('#cphSearchArea_ctrlCareActivity_tabNavigation2');
+    let animalTabContentContainer = $('#cphSearchArea_ctrlCareActivity_tabNavigation2');
     if (!isAnimalSelected() || animalTabContentContainer.length === 0) {
         return;
     }
@@ -165,7 +164,7 @@ function replaceAnimalTabContentWithDbsNotes() {
     `);
     */
 
-    var openDbsNotesButton = $('<input type="button" class="button_green" id="shsdbs-notes-button" value="Open DBS Notes in new tab" />').bind('click', openDbsNotesPopup);
+    let openDbsNotesButton = $('<input type="button" class="button_green" id="shsdbs-notes-button" value="Open DBS Notes in new tab" />').bind('click', openDbsNotesPopup);
 
     animalTabContentContainer.children().hide();
     animalTabContentContainer.append(openDbsNotesButton);
@@ -188,7 +187,7 @@ function validateAtLeastOneChecked(checkboxInputName, validationElement) {
 }
 
 function getSelectedCheckboxValues(checkboxName) {
-    var output = [];
+    let output = [];
     $(`input[name="${checkboxName}"]:checked`).each(function() {
         output.push(this.value);
     });
@@ -208,16 +207,16 @@ function setSelectedCheckboxValues(root, checkboxName, selectedValues) {
 //
 // Requires each <select id="foo"> have a corresponding <label for="foo">
 function getSelectBoxValues(selectContainerElement) {
-    var output = {};
+    let output = {};
     selectContainerElement.find('select').each(function() {
-        var selectElement = $(this);
-        var selectId = selectElement.attr('id')
+        let selectElement = $(this);
+        let selectId = selectElement.attr('id')
         
-        var labelElement = selectContainerElement.find(`label[for="${selectId}"]`);
-        var labelText = labelElement.text().trim().replace(/:$/, '');
+        let labelElement = selectContainerElement.find(`label[for="${selectId}"]`);
+        let labelText = labelElement.text().trim().replace(/:$/, '');
 
-        var selectedOptionElement = selectElement.find('option:selected');
-        var selectedOptionValue = selectedOptionElement.val() || selectedOptionElement.text();
+        let selectedOptionElement = selectElement.find('option:selected');
+        let selectedOptionValue = selectedOptionElement.val() || selectedOptionElement.text();
         if (selectedOptionValue == '') {
             return;
         }
@@ -229,15 +228,15 @@ function getSelectBoxValues(selectContainerElement) {
 
 function setSelectBoxValues(selectContainerElement, selectedValues) {
     selectContainerElement.find('select').each(function() {
-        var selectElement = $(this);
-        var selectId = selectElement.attr('id')
+        let selectElement = $(this);
+        let selectId = selectElement.attr('id')
         
-        var labelElement = selectContainerElement.find(`label[for="${selectId}"]`);
-        var labelText = labelElement.text().trim().replace(/:$/, '');
+        let labelElement = selectContainerElement.find(`label[for="${selectId}"]`);
+        let labelText = labelElement.text().trim().replace(/:$/, '');
 
-        var selectedOptionValue = selectedValues[labelText];
+        let selectedOptionValue = selectedValues[labelText];
         if (selectedOptionValue) {
-            var selectedOptionElement = selectElement.find(`option:contains(${selectedOptionValue})`)
+            let selectedOptionElement = selectElement.find(`option:contains(${selectedOptionValue})`)
             selectedOptionElement.prop('selected', true);
         }
     });
@@ -257,11 +256,11 @@ function getObservationsSummary(observationSelectBoxValues) {
 
 function formatCareActivityNote(noteUiState) {
     // This exact value must remain stable for several report builder reports to work
-    var formattedFlagForStaff = noteUiState.flagForStaff ? '!!! FLAGGED FOR STAFF REVIEW !!!' : '';
+    let formattedFlagForStaff = noteUiState.flagForStaff ? '!!! FLAGGED FOR STAFF REVIEW !!!' : '';
 
-    var activitySummary = noteUiState.activities.join(', ');
-    var trainingSummary = getTrainingSummary(noteUiState.training);
-    var observationsSummary = getObservationsSummary(noteUiState.observations);
+    let activitySummary = noteUiState.activities.join(', ');
+    let trainingSummary = getTrainingSummary(noteUiState.training);
+    let observationsSummary = getObservationsSummary(noteUiState.observations);
     
     return `
 ${formattedFlagForStaff}
@@ -300,12 +299,12 @@ function onNoteUiInputChange() {
     validateAtLeastOneChecked('shsdbs-noteui-input-activity');
 
     g_lastNoteUiState = getNoteUiState();
-    var formattedNotes = formatCareActivityNote(g_lastNoteUiState);
+    let formattedNotes = formatCareActivityNote(g_lastNoteUiState);
     $('#cphSearchArea_ctrlCareActivity_ctrlCareActivityDetails_txtActivityNotes').val(formattedNotes);
 }
 
 function setUpAddNoteUi() {
-    var newAddNoteUi = $(`
+    let newAddNoteUi = $(`
     <div id="shsdbs-noteui-container">
     <div class="shsdbs-noteui-horizontal-section">
         <fieldset>
@@ -557,7 +556,7 @@ function setUpAddNoteUi() {
     <div id="replace_with_original_submit_button" />
     </div>
     `);
-    var originalAddNoteUi = $('#cphSearchArea_ctrlCareActivity_ctrlCareActivityDetails_pnlActivityDetails');
+    let originalAddNoteUi = $('#cphSearchArea_ctrlCareActivity_ctrlCareActivityDetails_pnlActivityDetails');
 
     newAddNoteUi.find('#shsdbs-noteui-input-animalname').val(`${getSelectedAnimalName()} (${getSelectedAnimalId()})`);
     newAddNoteUi.find('select').bind('change', onNoteUiInputChange);
@@ -616,7 +615,7 @@ function hidePageLoadingScreen() {
     $('#extension-injected-page-loading-screen').fadeOut();
 }
 function setupPageLoadingScreen() {
-    var loadingScreenDiv = $('<div id="extension-injected-page-loading-screen">Loading...</div>');
+    let loadingScreenDiv = $('<div id="extension-injected-page-loading-screen">Loading...</div>');
     $('body').append(loadingScreenDiv);
 }
 
