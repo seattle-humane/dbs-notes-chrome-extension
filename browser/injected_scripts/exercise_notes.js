@@ -47,8 +47,8 @@ function setCareActivityDetailsDefaults() {
 function hideUnnecessaryCareActivityUi() {
     console.debug('hideUnnecessaryCareActivityUi');
     for(let selector of [
-        // Care Activity page header
-        'table.main_header_table',
+        // Unnecessary 'Person: Anonymous' subheader (we never select a Person)
+        '#cphSearchArea_ctrlCareActivity_ctrlCareActivityHeader_lblPersonName',
         // Selected animal list
         '#cphSearchArea_ctrlCareActivity_ctrlCareActivityAnimalList_pnlAnimalList',
         // standalone 'Animal Search' tab under main tabs
@@ -115,6 +115,15 @@ function getSelectedAnimalField(columnIndex, expectedColumnName) {
     }
 
     return $(dataCells[columnIndex]).text();
+}
+
+function adjustCareActivityHeader() {
+    let headerText = isAnimalSelected() ?
+        `Exercise Notes: ${getSelectedAnimalName()} (${getSelectedAnimalId()})` :
+        'Exercise Notes';
+
+    $('#cphSearchArea_ctrlCareActivity_ctrlCareActivityHeader_lblHeaderText')
+        .text(headerText);
 }
 
 function adjustCareActivityTabs() {
@@ -595,6 +604,7 @@ function replaceSummaryTabContentWithConfirmationText() {
 function onCareActivityPanelUpdate() {
     console.debug('onCareActivityPanelUpdate');
     hideUnnecessaryCareActivityUi();
+    adjustCareActivityHeader();
     adjustCareActivityTabs();
     replaceAnimalTabContentWithDbsNotes();
     setCareActivityDetailsDefaults();
@@ -608,9 +618,14 @@ function registerCareActivityPetPointUiUpdates() {
     utils.registerUpdatePanelHandler('div#cphSearchArea_ctrlCareActivity_pnlCareActivityTabs', onCareActivityPanelUpdate);
 }
 
+// We set this as an extra on-click handler to any PetPoint buttons that will
+// result in re-population of DOM elements that we need to inject changes into
+// during onCareActivityPanelUpdate(). The corresponding hide call happens at
+// the end of that update handler.
 function showPageLoadingScreen() {
     $('#extension-injected-page-loading-screen').fadeIn('fast');
 }
+
 function hidePageLoadingScreen() {
     $('#extension-injected-page-loading-screen').fadeOut();
 }
