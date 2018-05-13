@@ -38,7 +38,8 @@ function setAnimalSearchCriteriaDefaultsOnce() {
 function registerAnimalSearchPanelUpdateHandler() {
     let selectorMatchingAllAnimalSearchPanels = [
         'div#cphSearchArea_ctrlCareActivity_pnlCareActivityTabs',
-        'div#cphSearchArea_ctrlAnimal_ctrlAnimalSearch_pnlAnimalSearch'
+        'div#cphWorkArea_ctrlCareBehaviorTab_pnlCareBehaviorTabs',
+        'div#cphSearchArea_ctrlAnimal_pnlAnimalTabs',
     ].join(', ');
 
     utils.registerUpdatePanelHandler(

@@ -18,6 +18,12 @@ export function changeSelectElementToValueWithText(selectElement, text) {
 }
 
 export function registerUpdatePanelHandler(panelSelector, handler) {
+    let currentPanels = $(panelSelector);
+    if (currentPanels.length === 0) {
+        console.debug(`registerUpdatePanelHandler('${panelSelector}'): Skipping, no panels matched`);
+        return;
+    }
+
     var observer = new MutationObserver(function(mutationsList) {
         console.debug('Observed mutation ' + mutationsList);
         for(var mutation of mutationsList) {
@@ -28,7 +34,7 @@ export function registerUpdatePanelHandler(panelSelector, handler) {
         }
     });
 
-    $(panelSelector).parent().each(function() {
+    currentPanels.parent().each(function() {
         console.debug('Registering observer at ' + this);
         observer.observe(this, {childList: true, subtree: true})
     });
