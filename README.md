@@ -4,6 +4,7 @@
 This is what powers the dashboard the Seattle Humane DBS team uses to leave notes about walks/training/etc in PetPoint.
 
 ## Release notes
+* 1.4.0 (5/20/18): Show the main PetPoint menu to enable shared volunteer/staff usage + report printing
 * 1.3.0 (3/26/18): Added 'Nosework' activity per Jenny B
 * 1.2.0 (3/26/18): Removed 'Got It!' from training select boxes per Pat Wynn
 * 1.1.2 (3/25/18): fix issue where notes would get eaten every 9-10 minutes
