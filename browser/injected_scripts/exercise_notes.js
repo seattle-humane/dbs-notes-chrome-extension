@@ -85,11 +85,6 @@ function getSelectedAnimalIdNumber() { // Strips 'A' prefix
 function isAnimalSelected() {
     return getSelectedAnimalId() != '';
 }
-function openDbsNotesPopup() {
-    // Ideally we'd replace this with an iframe, pending a support request to have the custom document renderable via https
-    let id = getSelectedAnimalIdNumber();
-    window.open(`../embeddedreports/CustomDocument.aspx?document=CustomAnimalDocument,DBS Notes,${id}`);
-}
 
 function getSelectedAnimalField(columnIndex, expectedColumnName) {
     // PetPoint ID dependencies
@@ -173,10 +168,20 @@ function replaceAnimalTabContentWithDbsNotes() {
     `);
     */
 
-    let openDbsNotesButton = $('<input type="button" class="button_green" id="shsdbs-notes-button" value="Open DBS Notes in new tab" />').bind('click', openDbsNotesPopup);
-
     animalTabContentContainer.children().hide();
-    animalTabContentContainer.append(openDbsNotesButton);
+    animalTabContentContainer.append(createViewNotesButton('DBS Notes'));
+    animalTabContentContainer.append($('<br />'));
+    animalTabContentContainer.append(createViewNotesButton('RDR Notes'));
+}
+
+// notesDocument should map to the reportName of a Document Builder report under Animal -> Publish
+function createViewNotesButton(notesDocument) {
+    return $(`<input type="button" class="button_green" id="shsdbs-notes-button" value="Open ${notesDocument} in new tab" />`)
+        .bind('click', function() {
+            // Ideally we'd replace this with an iframe, pending a support request to have the custom document renderable via https
+            let id = getSelectedAnimalIdNumber();
+            window.open(`../embeddedreports/CustomDocument.aspx?document=CustomAnimalDocument,${notesDocument},${id}`);
+        });
 }
 
 function validateAtLeastOneChecked(checkboxInputName, validationElement) {
