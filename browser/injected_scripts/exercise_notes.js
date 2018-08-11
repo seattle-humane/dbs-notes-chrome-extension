@@ -333,7 +333,9 @@ function setUpAddNoteUi() {
             <option>DBS 3</option>
             <option>DBS 4</option>
             <option>RDR</option>
+            <option>DCE</option>
             <option>BPA</option>
+            <option>Other Volunteer</option>
             <option>Staff</option>
         </select>
         </fieldset>
