@@ -15,7 +15,7 @@ function addNotesButtonToNavMenu() {
 
     navMenuList.prepend(`
         <li class="shsdbs-main-nav-item">
-            <a href="CareActivityTab.aspx?CreateActivity=1">
+            <a href="CareActivityTab.aspx?CreateActivity=1&ExerciseNotes=1">
                 <span>Exercise Notes</span>
             </a>
         </li>
@@ -142,7 +142,7 @@ function adjustCareActivityTabs() {
         $('#cphSearchArea_ctrlCareActivity_Button0').click(function() {
             // The default behavior is to search activities by ID, which is useless
             // Replace it with a link back to the animal search UI
-            window.location.href = 'CareActivityTab.aspx?CreateActivity=1'
+            window.location.href = 'CareActivityTab.aspx?CreateActivity=1&ExerciseNotes=1'
         });
         
         $('#cphSearchArea_ctrlCareActivity_Button2').val(`Read ${selectedAnimalName}'s notes`).click(showPageLoadingScreen); // Animal
@@ -157,12 +157,10 @@ function replaceAnimalTabContentWithDbsNotes() {
         return;
     }
 
-    // This is what we want to do, but we're blocked because CustomDocument.aspx
-    // downgrades from https to http in a redirect, which we have no means of
-    // intercepting or forcibly upgrading to prevent the resulting "mixed content"
-    // errors. PetPoint support case #00429913.
 
     /*
+    Future idea for doing this inline...
+
     animalTabContentContainer.html(`
         <iframe src="../embeddedreports/CustomDocument.aspx?document=CustomAnimalDocument,DBS%20Notes,37737071" />
     `);
@@ -645,6 +643,8 @@ function setupPageLoadingScreen() {
 
 addNotesButtonToNavMenu();
 setupPageLoadingScreen();
-registerCareActivityPetPointUiUpdates();
+if(/ExerciseNotes=1/.test(window.location.search)) {
+    registerCareActivityPetPointUiUpdates();
+}
 console.debug('SHSDBS: Exercise Notes setup complete');
 $('body').show();
