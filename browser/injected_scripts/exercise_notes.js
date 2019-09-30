@@ -172,6 +172,8 @@ function replaceAnimalTabContentWithDbsNotes() {
     animalTabContentContainer.append(createViewNotesButton('DBS Notes'));
     animalTabContentContainer.append($('<br />'));
     animalTabContentContainer.append(createViewNotesButton('RDR Notes'));
+    animalTabContentContainer.append($('<br />'));
+    animalTabContentContainer.append(createViewNotesButton('BMOD Notes'));
 }
 
 // notesDocument should map to the reportName of a Document Builder report under Animal -> Publish
